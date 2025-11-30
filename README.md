@@ -1,4 +1,3 @@
-# استبدال محتوى README.md بالمحتوى الموحّد
 @'
 # Hotel_Registration
 
