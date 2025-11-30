@@ -1,4 +1,3 @@
-// src/pages/BookingForm.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api, { getServices } from "../api";
@@ -16,7 +15,7 @@ export default function BookingForm() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // --- All Original State & Logic Preserved ---
+
   const [room, setRoom] = useState(null);
   const [availableServices, setAvailableServices] = useState([]);
   const [startDate, setStartDate] = useState("");
@@ -172,7 +171,6 @@ export default function BookingForm() {
     }
   };
 
-  // --- Styles ---
   const styles = {
     pageBg: { backgroundColor: "#f8f9fa", minHeight: "100vh" },
     card: { border: "none", borderRadius: "16px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)" },
@@ -218,7 +216,7 @@ export default function BookingForm() {
         <div className="row justify-content-center">
           <div className="col-lg-8 col-xl-7">
             
-            {/* Back Button */}
+          
             <button 
               className="btn btn-link text-decoration-none text-muted mb-3 p-0 fw-bold d-flex align-items-center gap-2"
               onClick={() => window.history.back()}
@@ -270,7 +268,7 @@ export default function BookingForm() {
                     </div>
                   </div>
 
-                  {/* Services Section */}
+              
                   {availableServices.length > 0 && (
                     <>
                       <h6 className="text-uppercase text-muted fw-bold mb-3 small tracking-wide mt-4">
@@ -307,7 +305,7 @@ export default function BookingForm() {
 
                   <hr className="my-4 text-muted opacity-25" />
 
-                  {/* Price Summary (Receipt Style) */}
+                
                   <div className="bg-light p-4 rounded-3 mb-4 border border-dashed">
                     <h6 className="fw-bold mb-3 d-flex align-items-center gap-2">
                       <FaMoneyBillWave className="text-success" /> Payment Summary
@@ -339,7 +337,7 @@ export default function BookingForm() {
                     </div>
                   </div>
 
-                  {/* Submit Button */}
+                
                   <button 
                     type="submit" 
                     className="btn btn-primary w-100 py-3 rounded-3 fw-bold fs-5 shadow-sm hover-scale"
