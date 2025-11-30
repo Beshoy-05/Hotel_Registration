@@ -15,7 +15,7 @@ export default function About() {
       `}</style>
 
       <div className="container py-5" style={styles.fadeIn}>
-        {/* Header */}
+
         <div className="text-center mb-5">
           <h6 className="text-uppercase text-primary fw-bold letter-spacing-2">Welcome to Luxury</h6>
           <h1 className="display-4 fw-bold mb-3">About <span style={styles.gradientText}>Grand Hotel</span></h1>
@@ -26,7 +26,7 @@ export default function About() {
           </p>
         </div>
 
-        {/* Story Section */}
+
         <div className="row align-items-center mb-5 g-5">
           <div className="col-lg-6">
             <div className="position-relative">
@@ -61,7 +61,7 @@ export default function About() {
           </div>
         </div>
 
-        {/* Features Grid */}
+       
         <div className="bg-light p-5 rounded-5 mb-5">
           <div className="text-center mb-5">
             <h3 className="fw-bold">Why Choose Us?</h3>
