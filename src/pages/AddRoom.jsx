@@ -1,4 +1,4 @@
-// src/pages/AddRoom.jsx
+
 import React, { useState, useRef } from "react";
 import { createRoom } from "../api";
 import { useNavigate } from "react-router-dom";
@@ -27,14 +27,14 @@ export default function AddRoom() {
       const res = await createRoom(formData);
       const data = res.data ?? res;
 
-      // save created room for preview
+ 
       setCreatedRoom(data);
       setStatus("success");
 
-      // dispatch global event so Rooms list (or any listener) knows a new room was created
+      
       window.dispatchEvent(new CustomEvent("room-created", { detail: data }));
 
-      // reset form
+      
       setNumber("");
       setType("");
       setPrice("");
