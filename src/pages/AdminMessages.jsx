@@ -1,4 +1,4 @@
-// src/pages/AdminMessages.jsx
+
 import React, { useEffect, useState } from "react";
 import { getMessages, markMessageRead, deleteMessage } from "../api";
 import Swal from "sweetalert2";
@@ -11,13 +11,12 @@ export default function AdminMessages() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // تحميل الرسائل
+ 
   const load = async () => {
     setLoading(true);
     try {
       const res = await getMessages();
-      // 🔧 الإصلاح هنا: البيانات موجودة في res.data
-      // نتأكد أنها مصفوفة، لو لا نضع مصفوفة فارغة
+    
       const data = res.data || []; 
       setMessages(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -30,11 +29,11 @@ export default function AdminMessages() {
 
   useEffect(() => { load(); }, []);
 
-  // تعليم كـ مقروء
+
   const handleMarkRead = async (id) => {
     try {
       await markMessageRead(id);
-      // تحديث فوري للواجهة
+    
       setMessages(prev => prev.map(m => m.id === id ? { ...m, isRead: true } : m));
       
       const Toast = Swal.mixin({
@@ -46,7 +45,6 @@ export default function AdminMessages() {
     }
   };
 
-  // حذف رسالة
   const handleDelete = async (id) => {
     Swal.fire({
       title: 'Are you sure?',
@@ -69,7 +67,7 @@ export default function AdminMessages() {
     });
   };
 
-  // حساب عدد الرسائل غير المقروءة
+
   const unreadCount = messages.filter(m => !m.isRead).length;
 
   if (loading) {
@@ -106,7 +104,7 @@ export default function AdminMessages() {
         </div>
       </div>
 
-      {/* Empty State */}
+     
       {messages.length === 0 ? (
         <div className="text-center py-5 bg-light rounded-4 shadow-sm fade-in">
           <div className="mb-3 text-muted opacity-50" style={{ fontSize: "4rem" }}>
@@ -126,7 +124,7 @@ export default function AdminMessages() {
               <div className="card-body p-4">
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3">
                   
-                  {/* User Info & Message */}
+             
                   <div className="d-flex gap-3 w-100">
                     <div className={`rounded-circle p-3 d-flex align-items-center justify-content-center ${!m.isRead ? 'bg-primary text-white' : 'bg-light text-secondary'}`} style={{ width: 50, height: 50, minWidth: 50 }}>
                       <FaUserCircle size={24} />
@@ -154,7 +152,7 @@ export default function AdminMessages() {
                     </div>
                   </div>
 
-                  {/* Actions */}
+              
                   <div className="d-flex flex-row flex-md-column gap-2 ms-md-3 mt-2 mt-md-0 align-self-start">
                     {!m.isRead && (
                       <button 
