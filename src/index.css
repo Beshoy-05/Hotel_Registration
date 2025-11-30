@@ -1,0 +1,22 @@
+/* src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--secondary);
+  background-color: var(--light);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+ h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+  color: var(--dark);
+  font-weight: 700;
+}
+
+a { text-decoration: none; }
+
+
+.text-muted { color: #94a3b8 !important; }
+.text-secondary { color: #64748b !important; }
