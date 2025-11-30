@@ -1,4 +1,4 @@
-// src/pages/Contact.jsx
+
 import React, { useState } from "react";
 import { sendMessage } from "../api";
 import Swal from "sweetalert2";
@@ -34,7 +34,7 @@ const handleChange = (e) => {
         Message: form.message
       });
 
-      // نجاح
+      
       Swal.fire({
         icon: 'success',
         title: 'Message Sent!',
@@ -60,7 +60,7 @@ const handleChange = (e) => {
   return (
     <div className="container py-5">
       
-      {/* Header Section */}
+ 
       <div className="text-center mb-5" style={{ animation: "fadeInUp 0.8s ease-out" }}>
         <h6 className="text-primary fw-bold text-uppercase letter-spacing-2">Get In Touch</h6>
         <h2 className="fw-bold display-5 mb-3">Contact Us</h2>
@@ -70,11 +70,10 @@ const handleChange = (e) => {
       </div>
 
       <div className="row g-5 align-items-stretch">
-        
-        {/* Left Column: Contact Info */}
+       
         <div className="col-lg-5" style={{ animation: "fadeInLeft 0.8s ease-out" }}>
           <div className="h-100 bg-primary bg-opacity-10 p-5 rounded-5 position-relative overflow-hidden">
-            {/* Decorative Circle */}
+      
             <div className="position-absolute top-0 end-0 bg-primary rounded-circle opacity-10" style={{ width: 200, height: 200, transform: "translate(50%, -50%)" }}></div>
             
             <h3 className="fw-bold mb-4 text-dark">Contact Information</h3>
@@ -116,7 +115,7 @@ const handleChange = (e) => {
           </div>
         </div>
 
-        {/* Right Column: Form */}
+        
         <div className="col-lg-7" style={{ animation: "fadeInRight 0.8s ease-out" }}>
           <div className="bg-white p-5 rounded-5 shadow-lg border-0 h-100">
             <form onSubmit={handleSubmit}>
@@ -186,7 +185,6 @@ const handleChange = (e) => {
 
       </div>
 
-      {/* Inline Styles for Animations */}
       <style>{`
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
@@ -197,7 +195,7 @@ const handleChange = (e) => {
   );
 }
 
-// Helper Component for Social Buttons
+
 const SocialBtn = ({ icon }) => (
   <a href="#" className="d-flex align-items-center justify-content-center bg-white text-primary rounded-circle shadow-sm text-decoration-none" 
      style={{ width: 40, height: 40, transition: 'all 0.3s' }}
