@@ -1,4 +1,4 @@
-// src/pages/AdminDashboard.jsx
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
@@ -25,13 +25,6 @@ import {
   FaFilter
 } from "react-icons/fa";
 
-/**
- * AdminDashboard.jsx (UI Enhanced + User Tabs)
- * - Users Section: Added Tabs (All / Admins / Guests)
- * - Users Section: Converted to Table for better management
- * - Pagination: Enhanced UI with better buttons
- * - Preserved ALL previous logic (Images, Warnings, Services, Bookings)
- */
 
 const Toast = Swal.mixin({
   toast: true,
@@ -48,54 +41,53 @@ const Toast = Swal.mixin({
 export default function AdminDashboard() {
   const navigate = useNavigate();
 
-  // Data
+  
   const [users, setUsers] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Stats
+  
   const [accountsCount, setAccountsCount] = useState(0);
   const [usersWithBookingCount, setUsersWithBookingCount] = useState(0);
   const [roomsBookedNow, setRoomsBookedNow] = useState(0);
   const [roomsFreeNow, setRoomsFreeNow] = useState(0);
   const [nextRoomFree, setNextRoomFree] = useState(null);
 
-  // Pagination State
+ 
   const [usersPage, setUsersPage] = useState(1);
   const [bookingsPage, setBookingsPage] = useState(1);
   const ITEMS_PER_PAGE = 5;
 
-  // ✅ New: User Filter Tab State
+
   const [userFilter, setUserFilter] = useState("all"); // 'all', 'admin', 'user'
 
-  // Add Room
+
   const [number, setNumber] = useState("");
   const [type, setType] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   
-  // Create: Array for files
+ 
   const [selectedFiles, setSelectedFiles] = useState([]); 
   const [previews, setPreviews] = useState([]);
   
   const [selectedServiceIds, setSelectedServiceIds] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
-  // Manage Services
   const [newServiceName, setNewServiceName] = useState("");
   const [newServicePrice, setNewServicePrice] = useState("");
   const [serviceSubmitting, setServiceSubmitting] = useState(false);
 
-  // Edit service modal
+
   const [isEditingService, setIsEditingService] = useState(false);
   const [editServiceId, setEditServiceId] = useState(null);
   const [editServiceName, setEditServiceName] = useState("");
   const [editServicePrice, setEditServicePrice] = useState("");
   const [serviceEditSubmitting, setServiceEditSubmitting] = useState(false);
 
-  // Edit Room
+
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editNumber, setEditNumber] = useState("");
@@ -103,7 +95,6 @@ export default function AdminDashboard() {
   const [editPrice, setEditPrice] = useState("");
   const [editDescription, setEditDescription] = useState("");
   
-  // Edit: Array for new files
   const [editFiles, setEditFiles] = useState([]);
   const [editPreviews, setEditPreviews] = useState([]);
   
@@ -112,20 +103,20 @@ export default function AdminDashboard() {
 
   const [actionLoading, setActionLoading] = useState(false);
 
-  // Helpers
+  
   const getAuthHeader = () => {
     const token = localStorage.getItem("jwt_token");
     return token ? { Authorization: `Bearer ${token}` } : {};
   };
 
-  // Pagination Helpers
+
   const getPaginatedData = (data, page) => {
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
     return data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   };
   const getTotalPages = (data) => Math.ceil(data.length / ITEMS_PER_PAGE);
 
-  // Date Diff Helper
+  
   const getDuration = (start, end) => {
     const s = new Date(start);
     const e = new Date(end);
@@ -134,7 +125,7 @@ export default function AdminDashboard() {
     return diffDays > 0 ? diffDays : 1;
   };
 
-  // ✅ Filter Users Helper
+
   const getFilteredUsers = () => {
     if (userFilter === "admin") return users.filter(u => u.role === "Admin");
     if (userFilter === "user") return users.filter(u => u.role !== "Admin");
@@ -154,21 +145,19 @@ export default function AdminDashboard() {
       return;
     }
     loadData();
-    // eslint-disable-next-line
+ 
   }, [navigate]);
 
-  // Pagination Safety Check
+ 
   useEffect(() => {
     if (bookingsPage > getTotalPages(bookings) && bookings.length > 0) setBookingsPage(1);
-    
-    // Check user pagination against FILTERED list
+
     const filteredUsersCount = getFilteredUsers().length;
     const totalUserPages = Math.ceil(filteredUsersCount / ITEMS_PER_PAGE);
     if (usersPage > totalUserPages && filteredUsersCount > 0) setUsersPage(1);
     
   }, [bookings, users, userFilter]);
 
-  // Cleanup Object URLs
   useEffect(() => {
     return () => {
       previews.forEach(url => URL.revokeObjectURL(url));
@@ -176,7 +165,6 @@ export default function AdminDashboard() {
     };
   }, [previews, editPreviews]);
 
-  // ---------- loadData ----------
   async function loadData() {
     try {
       setLoading(true);
@@ -198,14 +186,12 @@ export default function AdminDashboard() {
         return { ...s, price: isNaN(p) ? 0 : p };
       });
 
-      // sort bookings
       const allBookings = [...allBookingsRaw].sort((a, b) => {
         const da = a.startDate ? new Date(a.startDate).getTime() : 0;
         const db = b.startDate ? new Date(b.startDate).getTime() : 0;
         return da - db;
       });
 
-      // sort users
       const parseUserCreatedAt = (u) => {
         if (!u) return null;
         const candidates = [u.createdAt, u.created_at, u.createdOn, u.registeredAt, u.registered_on, u.created];
@@ -226,7 +212,6 @@ export default function AdminDashboard() {
         return 0;
       });
 
-      // active bookings list
       const now = new Date();
       const activeList = allBookings.filter((b) => {
         const end = b.endDate ? new Date(b.endDate) : null;
@@ -235,7 +220,6 @@ export default function AdminDashboard() {
         return end.getTime() >= now.getTime() && status !== "cancelled" && status !== "rejected";
       });
 
-      // stats
       const accounts = allUsers.length;
 
       const getBookingUserKey = (bk) => {
@@ -261,7 +245,6 @@ export default function AdminDashboard() {
       const roomsTotal = allRooms.length;
       const roomsFree = Math.max(0, roomsTotal - roomsBooked);
 
-      // next free logic
       let nextFree = null;
       if (activeList.length > 0) {
         const sortedByEnd = [...activeList].sort((x, y) => {
@@ -305,7 +288,6 @@ export default function AdminDashboard() {
     else setList([...currentList, id]);
   };
 
-  // ---------- Users / Roles ----------
   const assignRole = async (userId) => {
     if (!userId) return;
     setActionLoading(true);
@@ -313,7 +295,7 @@ export default function AdminDashboard() {
       await api.post(`/Admin/users/${userId}/assign-role`, { role: "Admin" });
       Toast.fire({ icon: "success", title: "User promoted to Admin successfully" });
       await reloadUsers();
-      setUsersPage(1); // Reset to first page to see changes
+      setUsersPage(1);
     } catch (err) {
       Swal.fire("Failed", err?.response?.data?.message || err.message, "error");
     } finally {
@@ -336,7 +318,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // ---------- Services ----------
   const handleCreateService = async (e) => {
     e.preventDefault();
     if (!newServiceName) return;
@@ -391,7 +372,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // ---------- Rooms create / edit / delete ----------
 
   const handleFileSelect = (e) => {
       const files = Array.from(e.target.files);
@@ -481,7 +461,6 @@ export default function AdminDashboard() {
       formData.append("PricePerNight", Number(editPrice));
       formData.append("Description", editDescription ?? "");
 
-      // ✅ Multiple Images Loop
       if (editFiles.length > 0) {
         editFiles.forEach(file => {
             formData.append("Images", file);
@@ -527,7 +506,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // Booking actions
  const handleBookingAction = async (id, action) => {
   if (!id || !action) return;
   setActionLoading(true);
@@ -572,7 +550,7 @@ export default function AdminDashboard() {
     }
   };
 
-  // reload helpers
+
   const reloadRooms = async () => {
     try {
       const r = await api.get("/Rooms");
@@ -582,7 +560,7 @@ export default function AdminDashboard() {
   const reloadUsers = async () => {
     try {
       const r = await api.get("/Admin/users");
-      // simple sort to keep code clean
+     
       setUsers(r.data || []);
     } catch (e) { console.error(e); }
   };
@@ -629,7 +607,7 @@ export default function AdminDashboard() {
     );
   };
 
-  // ✅ Get Users to Display based on Tab Filter
+
   const displayedUsers = getFilteredUsers();
 
   return (
@@ -669,16 +647,15 @@ export default function AdminDashboard() {
         </div>
 
         <div className="container" style={styles.fadeIn}>
-          
-          {/* STATS ROW */}
+      
           <div className="row g-4 mb-4">
-             {/* Total Accounts */}
+         
              <StatsCard title="Total Accounts" count={accountsCount} icon={<FaUser />} color="primary" delay="0s" />
              
-             {/* Total Bookings */}
+             
              <StatsCard title="Total Bookings" count={bookings.length} icon={<FaCalendarAlt />} color="warning" delay="0.1s" />
 
-             {/* Rooms Occupied */}
+        
              <div className="col-md-3">
                <div className="card border-0 shadow-sm h-100 rounded-4 hover-card">
                  <div className="card-body p-3">
@@ -691,7 +668,7 @@ export default function AdminDashboard() {
                </div>
              </div>
 
-             {/* Rooms Free */}
+           
              <div className="col-md-3">
                <div className="card border-0 shadow-sm h-100 rounded-4 hover-card">
                  <div className="card-body p-3">
@@ -707,7 +684,7 @@ export default function AdminDashboard() {
 
           <div className="row g-4">
             <div className="col-lg-8">
-              {/* BOOKINGS TABLE */}
+          
               <div className="card border-0 shadow-sm rounded-4 mb-4">
                 <div className="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
                     <h5 className="fw-bold mb-0 text-secondary"><FaCalendarCheck /> Bookings</h5>
@@ -768,7 +745,7 @@ export default function AdminDashboard() {
                        </table>
                     </div>
                     
-                    {/* Booking Pagination */}
+                    
                     {bookings.length > ITEMS_PER_PAGE && (
                       <div className="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
                         <small className="text-muted">Page {bookingsPage} of {getTotalPages(bookings)}</small>
@@ -783,12 +760,11 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              {/* ✅ USERS TABLE WITH TABS */}
               <div className="card border-0 shadow-sm rounded-4">
                 <div className="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <h5 className="fw-bold mb-0 text-secondary"><FaUser /> Users Management</h5>
                     
-                    {/* Filter Tabs */}
+               
                     <div className="nav nav-pills">
                         <button className={`nav-link py-1 px-3 small fw-bold ${userFilter==='all'?'active':''}`} onClick={()=>setUserFilter('all')}>All</button>
                         <button className={`nav-link py-1 px-3 small fw-bold ${userFilter==='admin'?'active':''}`} onClick={()=>setUserFilter('admin')}>Admins</button>
@@ -846,7 +822,7 @@ export default function AdminDashboard() {
                     </table>
                   </div>
 
-                  {/* Users Pagination */}
+                
                   {displayedUsers.length > ITEMS_PER_PAGE && (
                     <div className="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
                       <small className="text-muted">Page {usersPage} of {Math.ceil(displayedUsers.length / ITEMS_PER_PAGE)}</small>
@@ -862,10 +838,10 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Sidebar (Forms) */}
+        
             <div className="col-lg-4">
               
-              {/* --- ADD NEW ROOM FORM --- */}
+           
               <div className="card border-0 shadow-sm rounded-4 mb-4 bg-white">
                 <div className="card-header bg-white border-0 pt-4 px-4">
                   <h5 className="fw-bold mb-0 text-primary"><FaPlus className="me-2" /> Add New Room</h5>
@@ -908,7 +884,7 @@ export default function AdminDashboard() {
                       </div>
                     </div>
 
-                    {/* ✅ Multiple Image Upload (Create) */}
+                 
                     <div className="mb-3">
                       <label className="custom-file-upload">
                         <input type="file" multiple style={{ display: "none" }} onChange={handleFileSelect} />
@@ -940,7 +916,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              {/* SERVICES & ROOMS LIST */}
+           
               <div className="card border-0 shadow-sm rounded-4 mb-4 bg-white">
                   <div className="card-header bg-white border-0 pt-4 px-4"><h5 className="fw-bold mb-0"><FaConciergeBell /> Manage Services</h5></div>
                   <div className="card-body p-4">
@@ -983,7 +959,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Edit Modal */}
+    
       {isEditing && (
         <div className="modal-backdrop-custom">
           <div className="card p-4 shadow-lg border-0" style={{ width: 560, borderRadius: 16 }}>
@@ -1025,7 +1001,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              {/* ✅ Multiple Images in Edit + WARNING */}
+      
               <div className="mb-4">
                 <label className="custom-file-upload">
                   <input type="file" multiple style={{ display: "none" }} onChange={handleEditFileChange} />
@@ -1041,7 +1017,7 @@ export default function AdminDashboard() {
                    </div>
                 )}
                 
-                {/* Warning Message */}
+              
                 <small className="d-block text-danger mt-1 fw-bold" style={{fontSize: "0.75rem"}}>
                   * Warning: Uploading new images will replace ALL existing images for this room.
                 </small>
@@ -1056,7 +1032,7 @@ export default function AdminDashboard() {
         </div>
       )}
       
-      {/* Edit Service Modal */}
+   
       {isEditingService && (
         <div className="modal-backdrop-custom">
             <div className="card p-4 shadow-lg" style={{ width: 420 }}>
@@ -1075,7 +1051,7 @@ export default function AdminDashboard() {
   );
 }
 
-// Stats Card Component
+
 const StatsCard = ({ title, count, icon, color, delay }) => (
   <div className="col-md-3" style={{ animation: `fadeIn 0.6s ease-out ${delay} forwards`, opacity: 0 }}>
     <div className="card border-0 shadow-sm h-100 rounded-4 hover-card">
